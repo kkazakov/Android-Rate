@@ -26,6 +26,12 @@ public class AppRate {
 
     private View view;
 
+    private int layoutId;
+
+    private int customButtonOkId;
+    private int customButtonLaterId;
+    private int customButtonCancelId;
+
     private OnClickButtonListener listener;
 
     private AppRate(Context context) {
@@ -82,6 +88,23 @@ public class AppRate {
         this.view = view;
         return this;
     }
+    public AppRate setViewLayout(int layoutId) {
+        this.layoutId = layoutId;
+        return this;
+    }
+
+    public AppRate setOkButtonId(int btn_id) {
+        this.customButtonOkId = btn_id;
+        return this;
+    }
+    public AppRate setLaterButtonId(int btn_id) {
+        this.customButtonLaterId = btn_id;
+        return this;
+    }
+    public AppRate setNoButtonId(int btn_id) {
+        this.customButtonCancelId = btn_id;
+        return this;
+    }
 
     public AppRate setOnClickButtonListener(OnClickButtonListener listener) {
         this.listener = listener;
@@ -129,7 +152,11 @@ public class AppRate {
 
     public void showRateDialog(Activity activity) {
         if(!activity.isFinishing()) {
-            DialogManager.create(activity, isShowNeutralButton, listener, view).show();
+            if (layoutId == 0) {
+                DialogManager.create(activity, isShowNeutralButton, listener, view).show();
+            } else {
+                DialogManager.create(activity, listener, layoutId, customButtonOkId, customButtonLaterId, customButtonCancelId).show();
+            }
         }
     }
 

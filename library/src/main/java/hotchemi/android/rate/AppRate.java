@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.view.View;
 
 import java.util.Date;
@@ -39,6 +41,8 @@ public class AppRate {
     private String customButtonLaterText;
     private String customButtonCancelText;
 
+    private boolean shouldResetOnNewVersion;
+
     private OnClickButtonListener listener;
 
     private AppRate(Context context) {
@@ -54,6 +58,15 @@ public class AppRate {
             }
         }
         return singleton;
+    }
+
+    public AppRate setShouldResetOnNewVersion(boolean shouldReset) {
+        this.shouldResetOnNewVersion = shouldReset;
+        return this;
+    }
+
+    public static boolean hasResetOnNewVersion() {
+        return singleton.shouldResetOnNewVersion;
     }
 
     public AppRate setLaunchTimes(int launchTimes) {
@@ -198,7 +211,8 @@ public class AppRate {
         return PreferenceHelper.getIsAgreeShowDialog(context) &&
                 isOverLaunchTimes() &&
                 isOverInstallDate() &&
-                isOverRemindDate();
+                isOverRemindDate() &&
+                isNewVersion();
     }
 
     private boolean isOverLaunchTimes() {
@@ -215,6 +229,27 @@ public class AppRate {
 
     private boolean isOverDate(long targetDate, int threshold) {
         return new Date().getTime() - targetDate >= threshold * 24 * 60 * 60 * 1000;
+    }
+
+    private boolean isNewVersion() {
+
+        int lastBuildNumber = PreferenceHelper.getAppBuildNumber(context);
+        if (lastBuildNumber == 0) return true;
+
+        int appBuildNumber = getCurrentAppBuildNumber(context);
+
+        return (lastBuildNumber < appBuildNumber);
+
+    }
+
+    public static int getCurrentAppBuildNumber(Context context) {
+
+        try {
+            return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {}
+
+        return 0;
+
     }
 
 }

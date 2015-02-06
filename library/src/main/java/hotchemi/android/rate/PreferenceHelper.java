@@ -21,6 +21,8 @@ final class PreferenceHelper {
 
     private static final String PREF_KEY_EVENT_TIMES = "android_rate_event_times";
 
+    private static final String PREF_KEY_BUILD_NUMBER = "android_rate_build_number";
+
     private PreferenceHelper() {
     }
 
@@ -103,6 +105,16 @@ final class PreferenceHelper {
     static void setEventTimes(Context context, int eventTimes) {
         SharedPreferences.Editor editor = getPreferencesEditor(context);
         editor.putInt(PREF_KEY_EVENT_TIMES, eventTimes);
+        commitOrApply(editor);
+    }
+
+    static int getAppBuildNumber(Context context) {
+        return getPreferences(context).getInt(PREF_KEY_BUILD_NUMBER, 0);
+    }
+
+    static void setAppBuildNumber(Context context, int buildNumber) {
+        SharedPreferences.Editor editor = getPreferencesEditor(context);
+        editor.putInt(PREF_KEY_BUILD_NUMBER, buildNumber);
         commitOrApply(editor);
     }
 

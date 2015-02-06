@@ -17,6 +17,30 @@ final class DialogManager {
     private DialogManager() {
     }
 
+    private static void doRate(Context context) {
+        String packageName = context.getPackageName();
+        Intent intent = new Intent(Intent.ACTION_VIEW, UriHelper.getGooglePlay(packageName));
+        if (UriHelper.isPackageExists(context, GOOGLE_PLAY_PACKAGE_NAME)) {
+            intent.setPackage(GOOGLE_PLAY_PACKAGE_NAME);
+        }
+        context.startActivity(intent);
+
+        if (AppRate.hasResetOnNewVersion()) {
+            PreferenceHelper.setLaunchTimes(context, 0); // clear launch times
+            PreferenceHelper.setAppBuildNumber(context, AppRate.getCurrentAppBuildNumber(context));
+        } else {
+            PreferenceHelper.setAgreeShowDialog(context, false);
+        }
+    }
+
+    private static void doRemindLater(Context context) {
+        PreferenceHelper.setRemindInterval(context);
+    }
+
+    private static void doNotAskAgain(Context context) {
+        PreferenceHelper.setAgreeShowDialog(context, false);
+    }
+
     static Dialog create(final Context context, final boolean isShowNeutralButton,
                          final OnClickButtonListener listener, final View view) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -26,13 +50,9 @@ final class DialogManager {
         builder.setPositiveButton(R.string.rate_dialog_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String packageName = context.getPackageName();
-                Intent intent = new Intent(Intent.ACTION_VIEW, UriHelper.getGooglePlay(packageName));
-                if (UriHelper.isPackageExists(context, GOOGLE_PLAY_PACKAGE_NAME)) {
-                    intent.setPackage(GOOGLE_PLAY_PACKAGE_NAME);
-                }
-                context.startActivity(intent);
-                PreferenceHelper.setAgreeShowDialog(context, false);
+
+                doRate(context);
+
                 if (listener != null) listener.onClickButton(which);
             }
         });
@@ -40,7 +60,7 @@ final class DialogManager {
             builder.setNeutralButton(R.string.rate_dialog_cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    PreferenceHelper.setRemindInterval(context);
+                    doRemindLater(context);
                     if (listener != null) listener.onClickButton(which);
                 }
             });
@@ -81,13 +101,9 @@ final class DialogManager {
             btn1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String packageName = context.getPackageName();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, UriHelper.getGooglePlay(packageName));
-                    if (UriHelper.isPackageExists(context, GOOGLE_PLAY_PACKAGE_NAME)) {
-                        intent.setPackage(GOOGLE_PLAY_PACKAGE_NAME);
-                    }
-                    context.startActivity(intent);
-                    PreferenceHelper.setAgreeShowDialog(context, false);
+
+                    doRate(context);
+
                     if (listener != null) listener.onClickButton(0);
 
                     alert.cancel();
@@ -106,7 +122,7 @@ final class DialogManager {
             btn2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PreferenceHelper.setRemindInterval(context);
+                    doRemindLater(context);
                     if (listener != null) listener.onClickButton(1);
                     alert.cancel();
                 }
@@ -123,7 +139,7 @@ final class DialogManager {
             btn3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PreferenceHelper.setAgreeShowDialog(context, false);
+                    doNotAskAgain(context);
                     if (listener != null) listener.onClickButton(2);
                     alert.cancel();
                 }

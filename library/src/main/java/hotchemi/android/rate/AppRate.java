@@ -32,6 +32,11 @@ public class AppRate {
     private int customButtonLaterId;
     private int customButtonCancelId;
 
+
+    private String customButtonOkText;
+    private String customButtonLaterText;
+    private String customButtonCancelText;
+
     private OnClickButtonListener listener;
 
     private AppRate(Context context) {
@@ -93,16 +98,29 @@ public class AppRate {
         return this;
     }
 
-    public AppRate setOkButtonId(int btn_id) {
-        this.customButtonOkId = btn_id;
+    public AppRate setOkButtonId(int btnId) {
+        this.customButtonOkId = btnId;
         return this;
     }
-    public AppRate setLaterButtonId(int btn_id) {
-        this.customButtonLaterId = btn_id;
+    public AppRate setLaterButtonId(int btnId) {
+        this.customButtonLaterId = btnId;
         return this;
     }
-    public AppRate setNoButtonId(int btn_id) {
-        this.customButtonCancelId = btn_id;
+    public AppRate setNoButtonId(int btnId) {
+        this.customButtonCancelId = btnId;
+        return this;
+    }
+
+    public AppRate setOkButtonText(String btnText) {
+        this.customButtonOkText = btnText;
+        return this;
+    }
+    public AppRate setLaterButtonText(String btnText) {
+        this.customButtonLaterText = btnText;
+        return this;
+    }
+    public AppRate setNoButtonText(String btnText) {
+        this.customButtonCancelText = btnText;
         return this;
     }
 
@@ -155,7 +173,8 @@ public class AppRate {
             if (layoutId == 0) {
                 DialogManager.create(activity, isShowNeutralButton, listener, view).show();
             } else {
-                DialogManager.create(activity, listener, layoutId, customButtonOkId, customButtonLaterId, customButtonCancelId).show();
+                DialogManager.create(activity, listener, layoutId, customButtonOkId, customButtonLaterId, customButtonCancelId,
+                        customButtonOkText, customButtonLaterText, customButtonCancelText).show();
             }
         }
     }

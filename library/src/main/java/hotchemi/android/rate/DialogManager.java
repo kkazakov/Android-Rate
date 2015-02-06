@@ -56,8 +56,9 @@ final class DialogManager {
     }
 
     static Dialog create(final Context context,
-                         final OnClickButtonListener listener, final int layoutId, final int buttonOkId,
-                         final int buttonLaterId, final int buttonCancelId) {
+                         final OnClickButtonListener listener, final int layoutId,
+                         final int buttonOkId, final int buttonLaterId, final int buttonCancelId,
+                         final String buttonOkText, final String buttonLaterText, final String buttonCancelText) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -72,7 +73,10 @@ final class DialogManager {
 
         if (buttonOkId > 0) {
             Button btn1 = (Button) layout.findViewById(buttonOkId);
-            btn1.setText(R.string.rate_dialog_ok);
+            if (buttonOkText != null)
+                btn1.setText(buttonOkText);
+            else
+                btn1.setText(R.string.rate_dialog_ok);
 
             btn1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,7 +97,11 @@ final class DialogManager {
         }
         if (buttonLaterId > 0) {
             Button btn2 = (Button) layout.findViewById(buttonLaterId);
-            btn2.setText(R.string.rate_dialog_cancel);
+
+            if (buttonLaterText != null)
+                btn2.setText(buttonLaterText);
+            else
+                btn2.setText(R.string.rate_dialog_cancel);
 
             btn2.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -106,7 +114,11 @@ final class DialogManager {
         }
         if (buttonCancelId > 0) {
             Button btn3 = (Button) layout.findViewById(buttonCancelId);
-            btn3.setText(R.string.rate_dialog_no);
+
+            if (buttonCancelText != null)
+                btn3.setText(buttonCancelText);
+            else
+                btn3.setText(R.string.rate_dialog_no);
 
             btn3.setOnClickListener(new View.OnClickListener() {
                 @Override

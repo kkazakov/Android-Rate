@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 final class DialogManager {
-    private static final String GOOGLE_PLAY_PACKAGE_NAME = "com.android.vending";
+    public static final String GOOGLE_PLAY_PACKAGE_NAME = "com.android.vending";
 
     private DialogManager() {
     }

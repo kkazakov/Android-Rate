@@ -1,7 +1,9 @@
 package hotchemi.android.rate;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
 import java.util.Date;
@@ -142,6 +144,15 @@ public class AppRate {
             singleton.showRateDialog(activity);
         }
         return isMeetsConditions;
+    }
+
+    public static void openPlayStore(Activity activity) {
+        String packageName = activity.getPackageName();
+        Intent intent = new Intent(Intent.ACTION_VIEW, UriHelper.getGooglePlay(packageName));
+        if (UriHelper.isPackageExists(activity, DialogManager.GOOGLE_PLAY_PACKAGE_NAME)) {
+            intent.setPackage(DialogManager.GOOGLE_PLAY_PACKAGE_NAME);
+        }
+        activity.startActivity(intent);
     }
 
     public static boolean passSignificantEvent(Activity activity) {
